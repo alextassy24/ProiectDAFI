@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f72c4e8fa106c270a05f38438105df12aeed95863f60cd5b4cbcb155fa853d79"
+            "sha256": "174f8000ac4c614a037d0bc931f6e5f1b8a0a46a8677e614e084d4cb1e834642"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -23,6 +23,14 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==3.6.0"
+        },
+        "channels": {
+            "hashes": [
+                "sha256:0ce53507a7da7b148eaa454526e0e05f7da5e5d1c23440e4886cf146981d8420",
+                "sha256:2253334ac76f67cba68c2072273f7e0e67dbdac77eeb7e318f511d2f9a53c5e4"
+            ],
+            "index": "pypi",
+            "version": "==4.0.0"
         },
         "crispy-bootstrap5": {
             "hashes": [
@@ -63,6 +71,13 @@
             ],
             "index": "pypi",
             "version": "==2.6.0"
+        },
+        "django-sse": {
+            "hashes": [
+                "sha256:b9487ba1483fd87970a9199f146b7eb8287e0b01aa614e646027857033338627"
+            ],
+            "index": "pypi",
+            "version": "==0.4.1"
         },
         "sqlparse": {
             "hashes": [
