@@ -1,3 +1,6 @@
+import csv
+from django.http import HttpResponse
+import io
 import random
 import time
 from django.shortcuts import render, redirect
@@ -82,3 +85,17 @@ def view_data(request):
         'max_value': max_val,
         'value': value}
     return render(request, 'view_data.html', context)
+
+
+def download_data(request):
+    data = SensorData.objects.filter(user=request.user)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="data.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['ID', 'Timestamp', 'Value'])
+    for datapoint in data:
+        writer.writerow([datapoint.id, datapoint.timestamp, datapoint.value])
+
+    return response
