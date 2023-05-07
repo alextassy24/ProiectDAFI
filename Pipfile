@@ -8,7 +8,6 @@ django = "*"
 django-cors-headers = "*"
 crispy-bootstrap5 = "*"
 django-jazzmin = "*"
-psycopg2 = "*"
 
 [dev-packages]
 
