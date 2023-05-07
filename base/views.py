@@ -69,16 +69,32 @@ def view_data(request):
     context = {}
     min_val = 0
     max_val = 0
-    data = SensorData.objects.filter(user=request.user)
-
     value = 0
+    data = 0
     if request.user.is_authenticated:
+        data = SensorData.objects.filter(user=request.user)
+
         if request.method == 'POST':
             min_val = float(request.POST.get('minValue'))
             max_val = float(request.POST.get('maxValue'))
-            value = round(random.uniform(min_val, max_val), 2)
+            value = round(random.uniform(min_val - 5, max_val + 5), 2)
             random_value = SensorData(user=request.user, value=value)
             random_value.save()
+
+            if value == min_val:
+                messages.warning(
+                    request, 'The teampeature is near the lower limit')
+            elif value == max_val:
+                messages.warning(
+                    request, 'The teampeature is near the higher limit')
+            elif value < min_val:
+                messages.error(
+                    request, 'The teampeature is under the lower limit')
+            elif value > max_val:
+                messages.error(
+                    request, 'The teampeature is beyond the higher limit')
+            else:
+                messages.success(request, 'The temperature is perfect!')
     context = {
         'data': data,
         'min_value': min_val,
