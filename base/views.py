@@ -65,10 +65,11 @@ def register_page(request):
 
 
 def view_data(request):
+    context = {}
 
     if request.user.is_authenticated:
-        temp_data = Temperature.objects.filter(user=request.user)
-        press_data = Pressure.objects.filter(user=request.user)
+        temp_data = Temperature.objects.all()
+        press_data = Pressure.objects.all()
 
         # if request.method == 'POST':
         #     min_val = float(request.POST.get('minValue'))
@@ -91,12 +92,15 @@ def view_data(request):
         #         request, 'The teampeature is beyond the higher limit')
         # else:
         #     messages.success(request, 'The temperature is perfect!')
-
-    return render(request, 'view_data.html')
+    context = {
+        'temp_data': temp_data,
+        'press_data': press_data
+    }
+    return render(request, 'view_data.html', context)
 
 
 def download_temperature(request):
-    data = Temperature.objects.filter(user=request.user)
+    data = Temperature.objects.all()
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="temperature.csv"'
@@ -110,7 +114,7 @@ def download_temperature(request):
 
 
 def download_pressure(request):
-    data = Pressure.objects.filter(user=request.user)
+    data = Pressure.objects.all()
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="Pressure.csv"'

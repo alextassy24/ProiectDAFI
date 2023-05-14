@@ -10,14 +10,14 @@
           <div class="card mb-5">
             <div class="card-body">
               <h5 class="card-title">System status</h5>
-              <h4 class="card-title text-center mb-5 fw-bold"><span id="systemStatus">Idle</span></h4>
+              <h4 class="card-title text-center mb-5 fw-bold"><span id="systemStatus">Initializing</span></h4>
               <div class="d-flex justify-content-between">
                 <div>
-                  <a class="btn btn-info" id="coolingBtn">Cool</a>
-                  <a class="btn btn-danger btn-opacity-50" id="heatingBtn">Heat</a>
+                  <button class="btn btn-info" id="coolingBtn">Cool</button>
+                  <button class="btn btn-danger" id="heatingBtn">Heat</button>
                 </div>
                 <div>
-                  <a class="btn btn-danger" id="stopBtn">Stop</a>
+                  <button class="btn btn-danger" id="stopBtn">Stop</button>
                 </div>
               </div>
             </div>
@@ -68,7 +68,7 @@
                     </tr>
                   </thead>
                   <tbody id="dataTableBody">
-                    {% for value in temp_data%}
+                    {% for value in temp_data %}
                     <tr>
                       <td>{{value.id}}</td>
                       <td>{{ value.timestamp|date:"Y-m-d H:i:s" }}</td>
@@ -117,7 +117,7 @@
                     </tr>
                   </thead>
                   <tbody id="dataTableBody">
-                    {% for value in press_data%}
+                    {% for value in press_data %}
                     <tr>
                       <td>{{value.id}}</td>
                       <td>{{ value.timestamp|date:"Y-m-d H:i:s" }}</td>

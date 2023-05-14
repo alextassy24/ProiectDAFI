@@ -57,6 +57,7 @@ socket.onmessage = function (e) {
 
 	document.querySelector("#temperature").innerText = djangoData.value_temp;
 	document.querySelector("#pressure").innerText = djangoData.value_press;
+	document.querySelector("#systemStatus").innerText = djangoData.status;
 };
 
 let form = document.getElementById("form");
@@ -70,10 +71,27 @@ form.addEventListener("submit", (e) => {
 
 	socket.send(
 		JSON.stringify({
+			action: "set",
 			tempMinVal: tempMinVal,
 			tempMaxVal: tempMaxVal,
 			pressMinVal: pressMinVal,
 			pressMaxVal: pressMaxVal,
 		})
 	);
+});
+
+var coolingButton = document.getElementById("coolingBtn");
+var heatingButton = document.getElementById("heatingBtn");
+var stopButton = document.getElementById("stopBtn");
+
+coolingButton.addEventListener("click", function () {
+	socket.send(JSON.stringify({ action: "cooling" }));
+});
+
+heatingButton.addEventListener("click", function () {
+	socket.send(JSON.stringify({ action: "heating" }));
+});
+
+stopButton.addEventListener("click", function () {
+	socket.send(JSON.stringify({ action: "stop" }));
 });
