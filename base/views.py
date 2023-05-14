@@ -1,6 +1,5 @@
 import csv
 from django.http import HttpResponse
-import io
 import random
 import time
 from django.shortcuts import render, redirect

@@ -8,7 +8,8 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title text-center">Sensor Data</h5>
-              <h5 class="card-title">Generate value:{{value}}</h5>
+              <h5 class="card-title">Measured value: <span id="app"></span> </h5>
+
               <canvas id="myChart"></canvas>
             </div>
           </div>
@@ -61,7 +62,7 @@
           </div>
         </div>
       </div>
-      {% comment %} <script src="{% static 'scripts/script.js' %}"></script> {% endcomment %}
+      <script src="{% static 'scripts/script.js' %}"></script>
 
 	{% else %}
     <div class="mt-5">

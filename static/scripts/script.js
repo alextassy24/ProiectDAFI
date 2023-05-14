@@ -1,34 +1,34 @@
 var ctx = document.getElementById("myChart").getContext("2d");
-var myChart = new Chart(ctx, {
+
+var graphData = {
 	type: "line",
 	data: {
-		labels: [],
+		labels: ["jan", "feb", "mar", "apr", "may", "jun"],
 		datasets: [
 			{
-				label: "Generated Data",
-				data: [],
-				borderColor: "rgba(255, 99, 132, 1)",
-				backgroundColor: "rgba(255, 99, 132, 0.2)",
+				label: "Temperature",
+				data: [12, 19, 3, 5, 2, 3],
+				backgroundColor: ["rgba(73,198,230,0.5)"],
+				borderWidth: 5,
 			},
 		],
 	},
-	options: {
-		scales: {
-			yAxes: [
-				{
-					ticks: {
-						beginAtZero: true,
-					},
-				},
-			],
-		},
-	},
-});
+	options: {},
+};
 
-var source = new EventSource("{% url 'view_data' %}");
-source.onmessage = function (event) {
-	var data = JSON.parse(event.data);
-	myChart.data.labels.push("");
-	myChart.data.datasets[0].data.push(data.value);
+var myChart = new Chart(ctx, graphData);
+
+var socket = new WebSocket("ws://localhost:8000/ws/base/");
+
+socket.onmessage = function (e) {
+	var djangoData = JSON.parse(e.data);
+	console.log(djangoData);
+
+	var newGraphData = graphData.data.datasets[0].data;
+	newGraphData.shift();
+	newGraphData.push(djangoData.value);
+	graphData.data.datasets[0].data = newGraphData;
 	myChart.update();
+
+	document.querySelector("#app").innerText = djangoData.value;
 };

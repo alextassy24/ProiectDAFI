@@ -8,8 +8,8 @@ django = "*"
 django-cors-headers = "*"
 crispy-bootstrap5 = "*"
 django-jazzmin = "*"
-channels = "*"
-django-sse = "*"
+channels = {extras = ["daphne"], version = "*"}
+channels-redis = "*"
 
 [dev-packages]
 
