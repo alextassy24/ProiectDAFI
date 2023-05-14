@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from .forms import RegisterForm
-from .models import SensorData
+from .models import Temperature, Pressure
 
 
 def home(request):
@@ -65,48 +65,41 @@ def register_page(request):
 
 
 def view_data(request):
-    context = {}
-    min_val = 0
-    max_val = 0
-    value = 0
-    data = 0
+
     if request.user.is_authenticated:
-        data = SensorData.objects.filter(user=request.user)
+        temp_data = Temperature.objects.filter(user=request.user)
+        press_data = Pressure.objects.filter(user=request.user)
 
-        if request.method == 'POST':
-            min_val = float(request.POST.get('minValue'))
-            max_val = float(request.POST.get('maxValue'))
-            value = round(random.uniform(min_val - 5, max_val + 5), 2)
-            random_value = SensorData(user=request.user, value=value)
-            random_value.save()
+        # if request.method == 'POST':
+        #     min_val = float(request.POST.get('minValue'))
+        #     max_val = float(request.POST.get('maxValue'))
+        #     value = round(random.uniform(min_val - 5, max_val + 5), 2)
+        #     random_value = Temperature(user=request.user, value=value)
+        #     random_value.save()
 
-            if value == min_val:
-                messages.warning(
-                    request, 'The teampeature is near the lower limit')
-            elif value == max_val:
-                messages.warning(
-                    request, 'The teampeature is near the higher limit')
-            elif value < min_val:
-                messages.error(
-                    request, 'The teampeature is under the lower limit')
-            elif value > max_val:
-                messages.error(
-                    request, 'The teampeature is beyond the higher limit')
-            else:
-                messages.success(request, 'The temperature is perfect!')
-    context = {
-        'data': data,
-        'min_value': min_val,
-        'max_value': max_val,
-        'value': value}
-    return render(request, 'view_data.html', context)
+        # if value == min_val:
+        #     messages.warning(
+        #         request, 'The teampeature is near the lower limit')
+        # elif value == max_val:
+        #     messages.warning(
+        #         request, 'The teampeature is near the higher limit')
+        # elif value < min_val:
+        #     messages.error(
+        #         request, 'The teampeature is under the lower limit')
+        # elif value > max_val:
+        #     messages.error(
+        #         request, 'The teampeature is beyond the higher limit')
+        # else:
+        #     messages.success(request, 'The temperature is perfect!')
+
+    return render(request, 'view_data.html')
 
 
 def download_data(request):
-    data = SensorData.objects.filter(user=request.user)
+    data = Temperature.objects.filter(user=request.user)
 
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="data.csv"'
+    response['Content-Disposition'] = 'attachment; filename="temperature.csv"'
 
     writer = csv.writer(response)
     writer.writerow(['ID', 'Timestamp', 'Value'])

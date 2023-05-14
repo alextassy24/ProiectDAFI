@@ -1,14 +1,15 @@
-var ctx = document.getElementById("myChart").getContext("2d");
+var ctx = document.getElementById("myChart1").getContext("2d");
+var ctx2 = document.getElementById("myChart2").getContext("2d");
 
-var graphData = {
+var tempGraphData = {
 	type: "line",
 	data: {
-		labels: ["jan", "feb", "mar", "apr", "may", "jun"],
+		labels: [],
 		datasets: [
 			{
 				label: "Temperature",
-				data: [12, 19, 3, 5, 2, 3],
-				backgroundColor: ["rgba(73,198,230,0.5)"],
+				data: [],
+				backgroundColor: ["rgba(73,198,230,1)"],
 				borderWidth: 5,
 			},
 		],
@@ -16,19 +17,63 @@ var graphData = {
 	options: {},
 };
 
-var myChart = new Chart(ctx, graphData);
+var presGraphData = {
+	type: "line",
+	data: {
+		labels: [],
+		datasets: [
+			{
+				label: "Presure",
+				data: [],
+				backgroundColor: ["rgba(0,0,0,1)"],
+				borderWidth: 5,
+			},
+		],
+	},
+	options: {},
+};
+
+var myTempChart = new Chart(ctx, tempGraphData);
+var myPresChart = new Chart(ctx2, presGraphData);
 
 var socket = new WebSocket("ws://localhost:8000/ws/base/");
 
 socket.onmessage = function (e) {
 	var djangoData = JSON.parse(e.data);
-	console.log(djangoData);
 
-	var newGraphData = graphData.data.datasets[0].data;
-	newGraphData.shift();
-	newGraphData.push(djangoData.value);
-	graphData.data.datasets[0].data = newGraphData;
-	myChart.update();
+	var newTempGraphData = tempGraphData.data.datasets[0].data;
+	var newTempGraphLabels = tempGraphData.data.labels;
+	newTempGraphData.push(djangoData.value_temp);
+	newTempGraphLabels.push(djangoData.i);
+	tempGraphData.data.datasets[0].data = newTempGraphData;
+	myTempChart.update();
 
-	document.querySelector("#app").innerText = djangoData.value;
+	var newPresGraphData = presGraphData.data.datasets[0].data;
+	var newPresGraphLabels = presGraphData.data.labels;
+	newPresGraphData.push(djangoData.value_press);
+	newPresGraphLabels.push(djangoData.i);
+	presGraphData.data.datasets[0].data = newPresGraphData;
+	myPresChart.update();
+
+	document.querySelector("#temperature").innerText = djangoData.value_temp;
+	document.querySelector("#pressure").innerText = djangoData.value_press;
 };
+
+let form = document.getElementById("form");
+
+form.addEventListener("submit", (e) => {
+	e.preventDefault();
+	let tempMinVal = e.target.tempMinValue.value;
+	let tempMaxVal = e.target.tempMaxValue.value;
+	let pressMinVal = e.target.pressMinValue.value;
+	let pressMaxVal = e.target.pressMaxValue.value;
+
+	socket.send(
+		JSON.stringify({
+			tempMinVal: tempMinVal,
+			tempMaxVal: tempMaxVal,
+			pressMinVal: pressMinVal,
+			pressMaxVal: pressMaxVal,
+		})
+	);
+});
