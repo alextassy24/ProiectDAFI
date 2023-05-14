@@ -10,32 +10,54 @@
           <div class="card mb-5">
             <div class="card-body">
               <h5 class="card-title">System status</h5>
-              <h4 class="card-title text-center mb-5"><span id="systemStatus">Idle</span></h4>
-              <a class="btn btn-info me-2" id="coolingBtn">Cooling</a>
-              <a class="btn btn-danger btn-opacity-50" id="heatingBtn">Heating</a>
+              <h4 class="card-title text-center mb-5 fw-bold"><span id="systemStatus">Idle</span></h4>
+              <div class="d-flex justify-content-between">
+                <div>
+                  <a class="btn btn-info" id="coolingBtn">Cool</a>
+                  <a class="btn btn-danger btn-opacity-50" id="heatingBtn">Heat</a>
+                </div>
+                <div>
+                  <a class="btn btn-danger" id="stopBtn">Stop</a>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="card mb-5">
-            <div class="card-body">
-              <h5 class="card-title text-center mb-5">Actions</h5>
-              <a class="btn btn-danger me-2" id="stopBtn">Stop</a>
-              <a class="btn btn-primary" href="{% url 'download-data' %}" id="saveBtn">Save</a>
-            </div>
-          </div>
 
           <div class="card mb-3">
             <div class="card-body">
-              <h5 class="card-title text-center">Coolant Temperature</h5>
-              <h5 class="card-title">Measured value: <span id="temperature"></span></h5>
-
-              <canvas id="myChart1"></canvas>
+              <h5 class="card-title mb-3">Coolant Temperature Settings</h5>
+              <form method="POST" id="form">
+                {% csrf_token %}
+                <div class="mb-3">
+                  <label for="minValue" class="form-label">Minimum Value</label>
+                  <input type="number" class="form-control" name="tempMinValue" id="tempMinValue" value="{{temp_min_value}}">
+                </div>
+                <div class="mb-3">
+                  <label for="maxValue" class="form-label">Maximum Value</label>
+                  <input type="number" class="form-control" name="tempMaxValue" id="tempMaxValue" value="{{temp_max_value}}">
+                </div>
+                <hr class="mb-3">
+                <h5 class="card-title mb-3">Coolant Pressure Settings</h5>
+                <div class="mb-3">
+                  <label for="minValue" class="form-label">Minimum Value</label>
+                  <input type="number" class="form-control" name="pressMinValue" id="pressMinValue" value="{{press_min_value}}">
+                </div>
+                <div class="mb-3">
+                  <label for="maxValue" class="form-label">Maximum Value</label>
+                  <input type="number" class="form-control" name="pressMaxValue" id="pressMaxValue" value="{{press_max_value}}">
+                </div>
+                <input type="submit" value="Set" class="btn btn-success w-100" id="startBtn">
+              </form>
             </div>
           </div>
 
           <div class="card mt-3">
             <div class="card-body">
-              <h5 class="card-title">Temperature Data Table</h5>
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Temperature Data Table</h5>
+                <a class="btn btn-primary" href="{% url 'download-temperature' %}" id="saveBtn">Save</a>
+              </div>
               <div class="table-responsive">
                 <table class="table table-striped">
                   <thead>
@@ -61,34 +83,13 @@
 
         </div>
 
-
         <div class="col-md-6">
 
           <div class="card mb-3">
             <div class="card-body">
-              <h5 class="card-title mb-3">Coolant Temperature Settings</h5>
-              <form method="POST" id="form">
-                {% csrf_token %}
-                <div class="mb-3">
-                  <label for="minValue" class="form-label">Minimum Value</label>
-                  <input type="number" class="form-control" name="tempMinValue" id="tempMinValue" value="{{temp_min_value}}">
-                </div>
-                <div class="mb-3">
-                  <label for="maxValue" class="form-label">Maximum Value</label>
-                  <input type="number" class="form-control" name="tempMaxValue" id="tempMaxValue" value="{{temp_max_value}}">
-                </div>
-
-                <h5 class="card-title mb-3">Coolant Pressure Settings</h5>
-                <div class="mb-3">
-                  <label for="minValue" class="form-label">Minimum Value</label>
-                  <input type="number" class="form-control" name="pressMinValue" id="pressMinValue" value="{{press_min_value}}">
-                </div>
-                <div class="mb-3">
-                  <label for="maxValue" class="form-label">Maximum Value</label>
-                  <input type="number" class="form-control" name="pressMaxValue" id="pressMaxValue" value="{{press_max_value}}">
-                </div>
-                <input type="submit" value="Set" class="btn btn-success me-2" id="startBtn">
-              </form>
+              <h5 class="card-title text-center">Coolant Temperature</h5>
+              <h5 class="card-title">Measured value: <span id="temperature"></span></h5>
+              <canvas id="myChart1"></canvas>
             </div>
           </div>
 
@@ -96,14 +97,16 @@
             <div class="card-body">
               <h5 class="card-title text-center">Coolant Pressure</h5>
               <h5 class="card-title">Measured value: <span id="pressure"></span></h5>
-
               <canvas id="myChart2"></canvas>
             </div>
           </div>
 
           <div class="card mt-3">
             <div class="card-body">
-              <h5 class="card-title">Pressure Data Table</h5>
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title">Pressure Data Table</h5>
+                <a class="btn btn-primary" href="{% url 'download-pressure' %}" id="saveBtn">Save</a>
+              </div>
               <div class="table-responsive">
                 <table class="table table-striped">
                   <thead>

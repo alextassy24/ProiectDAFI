@@ -7,7 +7,7 @@ var tempGraphData = {
 		labels: [],
 		datasets: [
 			{
-				label: "Temperature",
+				label: "Temperature(°C)",
 				data: [],
 				backgroundColor: ["rgba(73,198,230,1)"],
 				borderWidth: 5,
@@ -23,7 +23,7 @@ var presGraphData = {
 		labels: [],
 		datasets: [
 			{
-				label: "Presure",
+				label: "Presure(bar)",
 				data: [],
 				backgroundColor: ["rgba(0,0,0,1)"],
 				borderWidth: 5,

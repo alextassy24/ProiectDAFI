@@ -95,11 +95,25 @@ def view_data(request):
     return render(request, 'view_data.html')
 
 
-def download_data(request):
+def download_temperature(request):
     data = Temperature.objects.filter(user=request.user)
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="temperature.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['ID', 'Timestamp', 'Value'])
+    for datapoint in data:
+        writer.writerow([datapoint.id, datapoint.timestamp, datapoint.value])
+
+    return response
+
+
+def download_pressure(request):
+    data = Pressure.objects.filter(user=request.user)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="Pressure.csv"'
 
     writer = csv.writer(response)
     writer.writerow(['ID', 'Timestamp', 'Value'])
