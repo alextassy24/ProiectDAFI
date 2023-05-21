@@ -32,7 +32,6 @@ class BaseConsumer(AsyncWebsocketConsumer):
             self.status = 'IDLE'
             await self.send(json.dumps({'status': self.status}))
             await asyncio.sleep(5)
-            self.status = 'Heating'
 
             for i in range(temp_min_val, temp_max_val + 1):
                 value_press = randint(press_min_val, press_max_val)

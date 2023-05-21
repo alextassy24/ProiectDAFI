@@ -10,5 +10,8 @@ urlpatterns = [
     path('download-temperature/', views.download_temperature,
          name='download-temperature'),
     path('download-pressure/', views.download_pressure, name='download-pressure'),
+    path('pagination-press/', views.pagination_press, name='pagination-press'),
+    path('pagination-temp/', views.pagination_temp, name='pagination-temp')
+
 
 ]

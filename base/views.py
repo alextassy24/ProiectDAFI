@@ -2,6 +2,7 @@ import csv
 from django.http import HttpResponse
 import random
 import time
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -94,9 +95,48 @@ def view_data(request):
         #     messages.success(request, 'The temperature is perfect!')
     context = {
         'temp_data': temp_data,
-        'press_data': press_data
+        'press_data': press_data,
+
     }
     return render(request, 'view_data.html', context)
+
+
+def pagination_temp(request):
+
+    data = Temperature.objects.all()
+    items_per_page = 10
+    paginator = Paginator(data, items_per_page)
+    page_number = request.GET.get('page')
+    paginated_data = paginator.get_page(page_number)
+    serialized_data = []
+
+    for item in paginated_data:
+        serialized_data.append({
+            'id': item.id,
+            'timestamp': item.timestamp,
+            'value': item.value
+        })
+
+    return JsonResponse({'data': serialized_data})
+
+
+def pagination_press(request):
+
+    data = Pressure.objects.all()
+    items_per_page = 10
+    paginator = Paginator(data, items_per_page)
+    page_number = request.GET.get('page')
+    paginated_data = paginator.get_page(page_number)
+    serialized_data = []
+
+    for item in paginated_data:
+        serialized_data.append({
+            'id': item.id,
+            'timestamp': item.timestamp,
+            'value': item.value
+        })
+
+    return JsonResponse({'data': serialized_data})
 
 
 def download_temperature(request):
